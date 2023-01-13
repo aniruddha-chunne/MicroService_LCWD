@@ -5,8 +5,12 @@ eureka:
     hostname: localhost
 
   client:
-    register-with-eureka: false
-    fetch-registry: false
+    register-with-eureka: true
+    fetch-registry: true
+
+spring:
+  application:
+    name: Eureka-Server
 
 
 server:

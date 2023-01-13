@@ -36,5 +36,4 @@ public class HotelController
         return ResponseEntity.ok(allHotel);
     }
 
-
 }
