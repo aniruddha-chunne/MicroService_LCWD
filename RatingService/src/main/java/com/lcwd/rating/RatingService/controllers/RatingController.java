@@ -44,5 +44,4 @@ public class RatingController
         return ResponseEntity.ok(ratingService.getRatings());
     }
 
-
 }
