@@ -22,7 +22,7 @@ class UserServiceApplicationTests {
 	void createRating()
 	{
 			Rating rating  = Rating.builder().rating(10).userId("").hotelId("").feedback("aaplied the response entityt").build();
-			Rating savedRating = ratingService.createRating(rating).getBody();   
+			Rating savedRating = ratingService.createRating(rating).getBody();
 
 		System.out.println("new rating created");
 
