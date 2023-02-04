@@ -4,6 +4,7 @@ import com.lcwd.user.service.UserService.entities.Hotel;
 import com.lcwd.user.service.UserService.entities.Rating;
 import com.lcwd.user.service.UserService.entities.User;
 import com.lcwd.user.service.UserService.exceptions.ResourceNotFoundException;
+import com.lcwd.user.service.UserService.external.services.HotelService;
 import com.lcwd.user.service.UserService.repositories.UserRepository;
 import com.lcwd.user.service.UserService.services.UserService;
 import org.slf4j.Logger;
@@ -11,10 +12,8 @@ import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Repository;
-import org.springframework.stereotype.Service;
 import org.springframework.web.client.RestTemplate;
 
-import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 import java.util.UUID;
@@ -26,6 +25,8 @@ public class UserServiceImpl implements UserService
     @Autowired
     private UserRepository userRepository;
 
+    @Autowired
+    private HotelService hotelService;
     private Logger logger = LoggerFactory.getLogger(UserServiceImpl.class);
 
     @Autowired
@@ -74,18 +75,20 @@ public class UserServiceImpl implements UserService
 
                                 System.out.println(rating.getHotelId());
 
-                               ResponseEntity<Hotel> forEntity = restTemplate.getForEntity("http://HOTEL-SERVICE:8082/hotels/" + rating.getHotelId(), Hotel.class);
+//                               ResponseEntity<Hotel> forEntity = restTemplate.getForEntity("http://HOTEL-SERVICE/hotels/" + rating.getHotelId(), Hotel.class);
+//
+//                               if(forEntity.getBody()==null)
+//                               {
+//                                   return null;
+//                               }
+//                                Hotel hotel = forEntity.getBody();
 
-                               if(forEntity.getBody()==null)
-                               {
-                                   return null;
-                               }
-                                Hotel hotel = forEntity.getBody();
+                                Hotel hotel =  hotelService.getHotel(rating.getHotelId());
 
                                 System.out.println("Hotel get from id is: " + hotel.toString());
 
 
-                                logger.info("response status code: {}", forEntity.getStatusCode());
+//                                logger.info("response status code: {}", forEntity.getStatusCode());
 
                                 rating.setHotel(hotel);
                                 return rating;
