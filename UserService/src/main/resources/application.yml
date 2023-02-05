@@ -1,9 +1,48 @@
-eureka:
-  instance:
-    prefer-ip-address: true
-    client:
-      fetch-registry: true
-      register-with-eureka: true
-      service-url :
-        defaultZone: http://localhost:8761/eureka
+#eureka:
+#  instance:
+#    prefer-ip-address: true
+#    client:
+#      fetch-registry: true
+#      register-with-eureka: true
+#      service-url :
+#        defaultZone: http://localhost:8761/eureka
+#
+
+
+
+
+spring:
+    config:
+      import:
+        optional: CONFIG-SERVER
+    profiles:
+      active: prod
+
+management:
+  health:
+    circuit-breakers:
+      enabled: true
+  endpoints:
+    web:
+      exposure:
+        include: health
+  endpoint:
+    health:
+      show-details: always
+
+resilience4j:
+  circuitbreaker:
+    instances:
+      RatingAndHotelCircuitBreaker:
+        registerHealthIndicator: true
+        eventConsumerBufferSize: 10
+        failureRateThreshold: 50
+        minimumNumberOfCalls: 5
+        automaticTransitionFromOpenToHalfOpenEnabled: true
+        waitDurationInOpenState: 6s
+        permittedNumberOfCallsInHalfOpenState: 3
+        slidingWindowSize: 10
+        slidingWindowType: COUNT_BASED
+
+
 
