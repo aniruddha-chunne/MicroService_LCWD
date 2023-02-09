@@ -40,9 +40,24 @@ resilience4j:
         minimumNumberOfCalls: 5
         automaticTransitionFromOpenToHalfOpenEnabled: true
         waitDurationInOpenState: 6s
-        permittedNumberOfCallsInHalfOpenState: 3
+        permittedNumberOfCallsInHalfOpenState: 5
         slidingWindowSize: 10
         slidingWindowType: COUNT_BASED
+
+
+  retry:
+   instances:
+    RatingHotelService:
+     max-attempts: 3
+     wait-duration: 5s
+
+
+#retry:
+#  instance:
+#   RatingHotelService:
+#    max-attempts: 3
+#    wait-duration: 5s
+
 
 
 

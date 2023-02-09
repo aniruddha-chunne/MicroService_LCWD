@@ -4,6 +4,7 @@ import com.lcwd.user.service.UserService.entities.User;
 import com.lcwd.user.service.UserService.repositories.UserRepository;
 import com.lcwd.user.service.UserService.services.UserService;
 import io.github.resilience4j.circuitbreaker.annotation.CircuitBreaker;
+import io.github.resilience4j.retry.annotation.Retry;
 import lombok.extern.flogger.Flogger;
 import org.apache.http.HttpStatus;
 import org.slf4j.ILoggerFactory;
@@ -32,11 +33,16 @@ public class UserController
         return ResponseEntity.status(HttpStatus.SC_CREATED).body(user1);
     }
 
-    @CircuitBreaker(name = "RatingAndHotelCircuitBreaker",fallbackMethod = "ratingHotelFallbackMethod")
+    int retrycount = 1;
+
+//    @CircuitBreaker(name = "RatingAndHotelCircuitBreaker",fallbackMethod = "ratingHotelFallbackMethod")
+    @Retry(name = "RatingHotelService", fallbackMethod = "ratingHotelFallbackMethod")
     @GetMapping("/{userId}")
     public ResponseEntity<User> getSingleUser(@PathVariable String userId)
     {
         User user  = userService.getUser(userId);
+        retrycount++;
+        System.out.println(retrycount + ": attempt");
         return ResponseEntity.ok(user);
     }
 
